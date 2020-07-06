@@ -53,13 +53,6 @@ def run():
 
 
 if __name__ == '__main__':
-    logger.setLevel(logging.DEBUG)
-    console_handler = logging.StreamHandler(sys.stdout)
-    formatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s]"
-                                  "[%(levelname)-5.5s]  %(message)s")
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
-
     try:
         run()
     except:

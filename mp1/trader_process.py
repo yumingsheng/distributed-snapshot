@@ -7,7 +7,10 @@ from helpers.trading_helper import unpack_list_data
 from helpers.trading_helper import update_logical_timestamp
 from helpers.trading_helper import update_vector_timestamp
 
+import time
+
 def trader_process(port_mapping, n_processes, id, asset, num_snapshots):
+    print("port mapping: ", port_mapping)
     rand = random.Random()
     rand.seed(id)
     sending_probability = rand.uniform(0.4, 0.8)
@@ -46,17 +49,20 @@ def trader_process(port_mapping, n_processes, id, asset, num_snapshots):
     # initialize sockets
     for i in range(id):
         server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_sock.bind((socket.gethostname(), port_mapping[(i, id)][1]))
+        # print("port_mapping: %s", port_mapping[(i, id)])
+        server_sock.bind(('localhost', port_mapping[(i, id)][1]))
         server_sock.listen(backlog)
         client_sock, (host, client_port) = server_sock.accept()
         sockets.append(client_sock)
 
     sockets.append(None)
 
+    time.sleep(0.5)
     for i in range(id + 1, n_processes):
         client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        addr = socket.gethostname()
+        addr = 'localhost'
         (source_port, destination_port) = port_mapping[(id, i)]
+        print("client: ", addr, source_port, destination_port)
         client_sock.bind((addr, source_port))
         client_sock.connect((addr, destination_port))
         sockets.append(client_sock)

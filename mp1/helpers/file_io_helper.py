@@ -19,9 +19,11 @@ def save_snapshot_channel(pid, snapshot_id, channel, channel_id):
     content = ''
     for entry in channel['data']:
         type = entry[0]
+        print("type: ", type)
 
         asset_type = ''
-        if type == 'send_widget':
+        if type == 1: # 'send_widget'
+            print("type send_widget")
             asset_type = 'widget'
         else:
             asset_type = 'money'
